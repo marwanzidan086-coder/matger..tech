@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { CartProvider } from '@/context/CartContext';
-import { AuthProvider } from '@/context/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -25,7 +24,6 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
       </head>
       <body className="font-body antialiased">
-        <AuthProvider>
           <CartProvider>
             <div className="flex flex-col min-h-screen">
               <Header />
@@ -37,7 +35,6 @@ export default function RootLayout({
             <FloatingWhatsAppButton />
             <Toaster />
           </CartProvider>
-        </AuthProvider>
       </body>
     </html>
   );
