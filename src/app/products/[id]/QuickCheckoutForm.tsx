@@ -50,7 +50,7 @@ export default function QuickCheckoutForm({ product }: QuickCheckoutFormProps) {
     const productDetails = `- ${product.name} (الكمية: 1) - السعر: ${product.price.toLocaleString('ar-EG')} جنيه`;
 
     const message = `
-طلب جديد من متجر Matgar.tech 🛍️
+طلب سريع لمنتج واحد من متجر Matgar.tech 🛍️
 -----------------------------------
 👤 *الاسم:* ${values.name}
 📱 *رقم الهاتف (1):* ${values.phone1}
@@ -61,7 +61,7 @@ ${values.phone2 ? `📱 *رقم الهاتف (2):* ${values.phone2}` : ''}
 ${values.village ? `- القرية: ${values.village}`: ''}
 - الشارع: ${values.street}
 -----------------------------------
-🛒 *الطلبات:*
+🛒 *المنتج المطلوب:*
 ${productDetails}
 -----------------------------------
 💰 *المبلغ الإجمالي:* ${product.price.toLocaleString('ar-EG')} جنيه
@@ -70,14 +70,15 @@ ${productDetails}
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     
     toast({
-      title: "تم إرسال طلبك!",
-      description: "سيتم توجيهك إلى واتساب لإرسال الطلب.",
+      title: "تم تجهيز طلبك!",
+      description: "سيتم الآن توجيهك إلى واتساب لإرسال الطلب. فقط اضغط على زر الإرسال.",
       variant: 'default',
     });
     
-    window.location.href = whatsappUrl;
+    // افتح واتساب في نافذة جديدة لتجنب مغادرة الصفحة
+    window.open(whatsappUrl, '_blank');
 
-    // Reset form and state after a short delay
+    // إعادة تعيين النموذج والحالة بعد فترة قصيرة للسماح بفتح واتساب
     setTimeout(() => {
         form.reset();
         setIsSubmitting(false);

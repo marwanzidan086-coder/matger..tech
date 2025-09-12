@@ -1,3 +1,4 @@
+
 'use client';
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -67,15 +68,23 @@ ${productDetails}
 
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
-    clearCart();
-    
     toast({
-      title: "تم إرسال طلبك!",
-      description: "سيتم توجيهك إلى واتساب لإرسال الطلب.",
+      title: "تم تجهيز طلبك!",
+      description: "سيتم الآن توجيهك إلى واتساب لإرسال الطلب. فقط اضغط على زر الإرسال.",
       variant: 'default',
     });
     
-    window.location.href = whatsappUrl;
+    // افتح واتساب في نافذة جديدة
+    window.open(whatsappUrl, '_blank');
+
+    // امسح العربة بعد فترة قصيرة للسماح بفتح واتساب
+    setTimeout(() => {
+        clearCart();
+        setIsSubmitting(false);
+        form.reset();
+        // يمكنك توجيه المستخدم لصفحة شكرًا أو الرئيسية
+        // window.location.href = '/thank-you';
+    }, 3000);
   }
 
   return (
