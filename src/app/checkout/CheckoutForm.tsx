@@ -26,6 +26,7 @@ export default function CheckoutForm() {
   const { cartItems, totalPrice, clearCart } = useCart();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [whatsappUrl, setWhatsappUrl] = useState('');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,7 +41,8 @@ export default function CheckoutForm() {
     },
   });
 
-  const handleOrderSubmit = async () => {
+  const handlePrepareOrder = async () => {
+    setIsSubmitting(true);
     const isValid = await form.trigger();
     if (!isValid) {
       toast({
@@ -48,10 +50,10 @@ export default function CheckoutForm() {
         description: "يرجى مراجعة الحقول المطلوبة والتأكد من إدخالها بشكل صحيح.",
         variant: "destructive",
       });
+      setIsSubmitting(false);
       return;
     }
     
-    setIsSubmitting(true);
     const values = form.getValues();
     const whatsappNumber = "201557219572";
     
@@ -77,21 +79,24 @@ ${productDetails}
 💰 *المبلغ الإجمالي:* ${totalPrice.toLocaleString('ar-EG')} جنيه
 `.trim().replace(/^\s+/gm, '');
 
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    setWhatsappUrl(url);
 
     toast({
       title: "تم تجهيز طلبك!",
-      description: "سيتم الآن توجيهك إلى واتساب لإرسال الطلب. فقط اضغط على زر الإرسال.",
+      description: "الآن اضغط على زر 'إرسال عبر واتساب' لإتمام العملية.",
       variant: 'default',
     });
-    
-    window.open(whatsappUrl, '_blank');
 
+    setIsSubmitting(false);
+  }
+  
+  const handleOrderSent = () => {
     setTimeout(() => {
         clearCart();
-        setIsSubmitting(false);
         form.reset();
-    }, 3000);
+        setWhatsappUrl('');
+    }, 1500);
   }
 
   return (
@@ -192,13 +197,22 @@ ${productDetails}
             </FormItem>
           )}
         />
-        <Button onClick={handleOrderSubmit} size="lg" className="w-full" disabled={isSubmitting || cartItems.length === 0}>
-          {isSubmitting ? (
-            <Loader2 className="ml-2 h-4 w-4 animate-spin" />
-          ) : (
-            "إرسال الطلب عبر واتساب"
-          )}
-        </Button>
+        
+        {!whatsappUrl ? (
+          <Button onClick={handlePrepareOrder} size="lg" className="w-full" disabled={isSubmitting || cartItems.length === 0}>
+            {isSubmitting ? (
+              <Loader2 className="ml-2 h-4 w-4 animate-spin" />
+            ) : (
+              "تجهيز الطلب"
+            )}
+          </Button>
+        ) : (
+          <Button asChild size="lg" className="w-full bg-green-500 hover:bg-green-600 text-white">
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" onClick={handleOrderSent}>
+              إرسال عبر واتساب
+            </a>
+          </Button>
+        )}
       </form>
     </Form>
   );
