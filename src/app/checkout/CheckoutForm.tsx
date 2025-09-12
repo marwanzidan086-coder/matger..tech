@@ -1,4 +1,3 @@
-
 'use client';
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,6 +10,7 @@ import { useCart } from "@/context/CartContext";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 const formSchema = z.object({
   name: z.string().min(3, { message: "الاسم يجب أن يكون 3 أحرف على الأقل" }),
@@ -40,8 +40,19 @@ export default function CheckoutForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const handleOrderSubmit = async () => {
+    const isValid = await form.trigger();
+    if (!isValid) {
+      toast({
+        title: "خطأ في البيانات",
+        description: "يرجى مراجعة الحقول المطلوبة والتأكد من إدخالها بشكل صحيح.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setIsSubmitting(true);
+    const values = form.getValues();
     const whatsappNumber = "201557219572";
     
     const productDetails = cartItems.map(item => 
@@ -74,22 +85,18 @@ ${productDetails}
       variant: 'default',
     });
     
-    // افتح واتساب في نافذة جديدة
     window.open(whatsappUrl, '_blank');
 
-    // امسح العربة بعد فترة قصيرة للسماح بفتح واتساب
     setTimeout(() => {
         clearCart();
         setIsSubmitting(false);
         form.reset();
-        // يمكنك توجيه المستخدم لصفحة شكرًا أو الرئيسية
-        // window.location.href = '/thank-you';
     }, 3000);
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
         <FormField
           control={form.control}
           name="name"
@@ -185,7 +192,7 @@ ${productDetails}
             </FormItem>
           )}
         />
-        <Button type="submit" size="lg" className="w-full" disabled={isSubmitting || cartItems.length === 0}>
+        <Button onClick={handleOrderSubmit} size="lg" className="w-full" disabled={isSubmitting || cartItems.length === 0}>
           {isSubmitting ? (
             <Loader2 className="ml-2 h-4 w-4 animate-spin" />
           ) : (

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,8 +42,19 @@ export default function QuickCheckoutForm({ product }: QuickCheckoutFormProps) {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const handleOrderSubmit = async () => {
+    const isValid = await form.trigger();
+    if (!isValid) {
+      toast({
+        title: "خطأ في البيانات",
+        description: "يرجى مراجعة الحقول المطلوبة والتأكد من إدخالها بشكل صحيح.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
+    const values = form.getValues();
     const whatsappNumber = "201557219572";
     
     const productDetails = `- ${product.name} (الكمية: 1) - السعر: ${product.price.toLocaleString('ar-EG')} جنيه`;
@@ -75,10 +85,8 @@ ${productDetails}
       variant: 'default',
     });
     
-    // افتح واتساب في نافذة جديدة لتجنب مغادرة الصفحة
     window.open(whatsappUrl, '_blank');
 
-    // إعادة تعيين النموذج والحالة بعد فترة قصيرة للسماح بفتح واتساب
     setTimeout(() => {
         form.reset();
         setIsSubmitting(false);
@@ -87,7 +95,7 @@ ${productDetails}
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
         <FormField
           control={form.control}
           name="name"
@@ -183,7 +191,7 @@ ${productDetails}
             </FormItem>
           )}
         />
-        <Button type="submit" size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90" disabled={isSubmitting}>
+        <Button onClick={handleOrderSubmit} size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90" disabled={isSubmitting}>
           {isSubmitting ? (
             <Loader2 className="ml-2 h-4 w-4 animate-spin" />
           ) : (
