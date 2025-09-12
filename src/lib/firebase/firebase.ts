@@ -1,7 +1,7 @@
 'use client';
 
-import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getAuth, Auth } from 'firebase/auth';
+import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
+import { getAuth, type Auth } from 'firebase/auth';
 
 const firebaseConfig = {
   projectId: 'studio-2315710205-76753',
@@ -13,7 +13,7 @@ const firebaseConfig = {
   messagingSenderId: '694894538203',
 };
 
-// تهيئة Firebase بطريقة آمنة للخادم والعميل
+// Initialize Firebase for SSR and SSG, prevent reinitialization on client side
 const app: FirebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth: Auth = getAuth(app);
 
