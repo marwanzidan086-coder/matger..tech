@@ -13,15 +13,8 @@ const firebaseConfig = {
   messagingSenderId: '694894538203',
 };
 
-let app: FirebaseApp;
-let auth: Auth;
-
-if (getApps().length === 0) {
-  app = initializeApp(firebaseConfig);
-} else {
-  app = getApp();
-}
-
-auth = getAuth(app);
+// تهيئة Firebase بطريقة آمنة للخادم والعميل
+const app: FirebaseApp = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+const auth: Auth = getAuth(app);
 
 export { app, auth };
