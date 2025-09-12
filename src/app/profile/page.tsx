@@ -1,17 +1,27 @@
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function ProfilePage() {
-  // Dummy user data - replace with actual user data from your auth provider
-  const user = {
-    name: "مستخدم جديد",
-    email: "user@example.com",
-  };
-  const isAuthenticated = false; // Replace with actual auth state
+  const { user, logout, loading } = useAuth();
+  const router = useRouter();
 
-  if (!isAuthenticated) {
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  
+  if (!user) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
         <Card className="w-full max-w-md p-8">
@@ -32,20 +42,31 @@ export default function ProfilePage() {
     );
   }
 
+  const getInitials = (name: string | null | undefined) => {
+    if (!name) return 'U';
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
+  }
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-8 font-headline">الملف الشخصي</h1>
       <Card>
-        <CardHeader>
-          <CardTitle>مرحبًا، {user.name}!</CardTitle>
-          <CardDescription>{user.email}</CardDescription>
+        <CardHeader className="flex flex-row items-center gap-4">
+          <Avatar className="h-16 w-16">
+            <AvatarImage src={user.photoURL || undefined} alt={user.displayName || "User"} />
+            <AvatarFallback>{getInitials(user.displayName)}</AvatarFallback>
+          </Avatar>
+          <div>
+            <CardTitle>مرحبًا، {user.displayName || "مستخدم"}!</CardTitle>
+            <CardDescription>{user.email}</CardDescription>
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
             <h3 className="font-semibold">طلباتي</h3>
             <p className="text-muted-foreground">لا توجد طلبات سابقة.</p>
           </div>
-          <Button variant="destructive">
+          <Button variant="destructive" onClick={handleLogout}>
             <LogOut className="ml-2 h-4 w-4" />
             تسجيل الخروج
           </Button>

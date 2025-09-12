@@ -10,6 +10,12 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/context/AuthContext";
+import { auth } from "@/lib/firebase/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   email: z.string().email({ message: "البريد الإلكتروني غير صالح" }),
@@ -21,6 +27,10 @@ const FacebookIcon = () => <svg role="img" viewBox="0 0 24 24" className="h-5 w-
 const AppleIcon = () => <svg role="img" viewBox="0 0 24 24" className="h-5 w-5" xmlns="http://www.w3.org/2000/svg"><path d="M12.01 6.32c-.02 0-.04 0-.06.02-.3-.02-.62-.02-.94-.02-1.92 0-3.83.98-4.95 2.5-2.22 3.03-1.42 7.63.85 10.03.92.98 2.05 1.64 3.32 1.64.3 0 .62 0 .93-.02.3.02.62.02.92.02 1.25 0 2.4-.64 3.32-1.62 1.52-1.6 2.02-3.43 2.02-5.15 0-2.33-.9-4.22-2.3-5.45-1.12-.98-2.6-1.5-4.1-1.52zm2.6 11.23c-.7.7-1.74 1.15-2.76 1.15-.3 0-.6-.02-.88-.04-.28.02-.58.04-.88.04-1.02 0-2.06-.45-2.76-1.15-1.32-1.28-1.9-3.26-1.5-5.27.78 1.4 2.22 2.28 3.86 2.28.3 0 .62 0 .92-.02.32.02.64.02.94.02 1.66 0 3.1-1.02 3.78-2.42-.5 2.1-1.28 4.08-2.62 5.43zM13.2 2.1c.9 0 1.84.45 2.42 1.24.58.78.8 1.8.52 2.74-.9-.02-1.84-.47-2.42-1.26-.58-.8-.8-1.8-.52-2.72z" fill="currentColor"/></svg>;
 
 export default function LoginPage() {
+  const { user, signInWithGoogle, signInWithFacebook, signInWithApple } = useAuth();
+  const router = useRouter();
+  const { toast } = useToast();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -29,13 +39,30 @@ export default function LoginPage() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // Handle login logic here
-    console.log(values);
-     // On successful login, you might want to redirect the user
-    // For now, let's just log to console and maybe redirect to the shop
-    window.location.href = '/shop';
+  useEffect(() => {
+    if (user) {
+      router.push('/shop');
+    }
+  }, [user, router]);
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await signInWithEmailAndPassword(auth, values.email, values.password);
+      toast({ title: "تم تسجيل الدخول بنجاح!" });
+      router.push('/shop');
+    } catch (error: any) {
+      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "خطأ في تسجيل الدخول",
+        description: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+      });
+    }
   };
+
+  if (user) {
+    return null; // Or a loading spinner, as the redirect will happen in useEffect
+  }
 
   return (
     <div className="flex items-center justify-center min-h-[70vh]">
@@ -90,15 +117,15 @@ export default function LoginPage() {
             </div>
           </div>
           <div className="space-y-3">
-             <Button variant="outline" className="w-full">
+             <Button variant="outline" className="w-full" onClick={signInWithGoogle}>
               <GoogleIcon />
               <span className="flex-grow">متابعة باستخدام جوجل</span>
             </Button>
-            <Button variant="outline" className="w-full bg-[#1877F2] text-white hover:bg-[#1877F2]/90 hover:text-white border-[#1877F2]">
+            <Button variant="outline" className="w-full bg-[#1877F2] text-white hover:bg-[#1877F2]/90 hover:text-white border-[#1877F2]" onClick={signInWithFacebook}>
               <FacebookIcon />
               <span className="flex-grow">متابعة باستخدام فيسبوك</span>
             </Button>
-            <Button variant="outline" className="w-full bg-black text-white hover:bg-black/80 hover:text-white border-black">
+            <Button variant="outline" className="w-full bg-black text-white hover:bg-black/80 hover:text-white border-black" onClick={signInWithApple}>
               <AppleIcon />
               <span className="flex-grow">متابعة باستخدام آبل</span>
             </Button>
