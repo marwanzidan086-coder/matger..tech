@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,9 @@ export default function LoginPage() {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     // Handle login logic here
     console.log(values);
+     // On successful login, you might want to redirect the user
+    // For now, let's just log to console and maybe redirect to the shop
+    window.location.href = '/shop';
   };
 
   return (
@@ -81,4 +85,10 @@ export default function LoginPage() {
             ليس لديك حساب؟{" "}
             <Link href="/signup" className="text-primary hover:underline">
               أنشئ حسابًا جديدًا
-            
+            </Link>
+          </div>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}

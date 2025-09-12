@@ -1,7 +1,8 @@
+
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart, Zap, User } from 'lucide-react';
+import { ShoppingCart, Zap, User, Home } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -17,6 +18,12 @@ export default function Header() {
           <span className="font-headline">Matgar.tech</span>
         </Link>
         <nav className='flex items-center gap-2'>
+           <Link href="/shop">
+            <Button variant="ghost" size="icon">
+              <Home className="h-6 w-6" />
+              <span className="sr-only">المتجر</span>
+            </Button>
+          </Link>
            <Link href="/profile">
             <Button variant="ghost" size="icon">
               <User className="h-6 w-6" />

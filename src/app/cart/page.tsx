@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useCart } from '@/context/CartContext';
@@ -18,7 +19,7 @@ export default function CartPage() {
         <h1 className="mt-4 text-2xl font-bold">عربة التسوق فارغة</h1>
         <p className="mt-2 text-muted-foreground">لم تقم بإضافة أي منتجات بعد.</p>
         <Button asChild className="mt-6">
-          <Link href="/">تصفح المنتجات</Link>
+          <Link href="/shop">تصفح المنتجات</Link>
         </Button>
       </div>
     );
