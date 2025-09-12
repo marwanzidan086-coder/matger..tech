@@ -5,6 +5,7 @@ import { AuthProvider } from '@/context/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import FloatingWhatsAppButton from '@/components/layout/FloatingWhatsAppButton';
 
 export const metadata: Metadata = {
   title: 'Matgar Tech Online',
@@ -33,6 +34,7 @@ export default function RootLayout({
               </main>
               <Footer />
             </div>
+            <FloatingWhatsAppButton />
             <Toaster />
           </CartProvider>
         </AuthProvider>
