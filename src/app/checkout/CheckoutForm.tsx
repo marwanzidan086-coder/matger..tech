@@ -13,9 +13,12 @@ import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(3, { message: "الاسم يجب أن يكون 3 أحرف على الأقل" }),
-  phone: z.string().min(10, { message: "رقم الهاتف غير صالح" }),
-  email: z.string().email({ message: "البريد الإلكتروني غير صالح" }).optional().or(z.literal('')),
-  address: z.string().min(10, { message: "يرجى إدخال عنوان مفصل" }),
+  phone1: z.string().min(10, { message: "رقم الهاتف الأول غير صالح" }),
+  phone2: z.string().optional().or(z.literal('')),
+  governorate: z.string().min(3, { message: "يرجى إدخال اسم المحافظة" }),
+  city: z.string().min(3, { message: "يرجى إدخال اسم المدينة" }),
+  village: z.string().optional().or(z.literal('')),
+  street: z.string().min(5, { message: "يرجى إدخال اسم الشارع" }),
 });
 
 export default function CheckoutForm() {
@@ -27,9 +30,12 @@ export default function CheckoutForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      phone: "",
-      email: "",
-      address: "",
+      phone1: "",
+      phone2: "",
+      governorate: "",
+      city: "",
+      village: "",
+      street: "",
     },
   });
 
@@ -45,9 +51,13 @@ export default function CheckoutForm() {
 طلب جديد من متجر Matgar.tech 🛍️
 -----------------------------------
 👤 *الاسم:* ${values.name}
-📱 *رقم الهاتف:* ${values.phone}
-${values.email ? `📧 *البريد الإلكتروني:* ${values.email}` : ''}
-📍 *العنوان:* ${values.address}
+📱 *رقم الهاتف (1):* ${values.phone1}
+${values.phone2 ? `📱 *رقم الهاتف (2):* ${values.phone2}` : ''}
+📍 *العنوان:*
+- المحافظة: ${values.governorate}
+- المدينة: ${values.city}
+${values.village ? `- القرية: ${values.village}`: ''}
+- الشارع: ${values.street}
 -----------------------------------
 🛒 *الطلبات:*
 ${productDetails}
@@ -69,7 +79,7 @@ ${productDetails}
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="name"
@@ -83,40 +93,83 @@ ${productDetails}
             </FormItem>
           )}
         />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="phone1"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>رقم الهاتف الأساسي</FormLabel>
+                <FormControl>
+                  <Input placeholder="مثال: 01012345678" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phone2"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>رقم هاتف إضافي (اختياري)</FormLabel>
+                <FormControl>
+                  <Input placeholder="مثال: 01112345678" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="governorate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>المحافظة</FormLabel>
+                <FormControl>
+                  <Input placeholder="مثال: القاهرة" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>المدينة / المركز</FormLabel>
+                <FormControl>
+                  <Input placeholder="مثال: مدينة نصر" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+         <FormField
+            control={form.control}
+            name="village"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>القرية / المنطقة (اختياري)</FormLabel>
+                <FormControl>
+                  <Input placeholder="مثال: الحى السابع" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         <FormField
           control={form.control}
-          name="phone"
+          name="street"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>رقم الهاتف</FormLabel>
+              <FormLabel>الشارع ورقم المبنى/الشقة</FormLabel>
               <FormControl>
-                <Input placeholder="مثال: 01012345678" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>البريد الإلكتروني (اختياري)</FormLabel>
-              <FormControl>
-                <Input placeholder="example@email.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="address"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>العنوان بالتفصيل</FormLabel>
-              <FormControl>
-                <Input placeholder="المدينة، الشارع، رقم المبنى، رقم الشقة" {...field} />
+                <Input placeholder="مثال: شارع عباس العقاد، مبنى 5، شقة 10" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
