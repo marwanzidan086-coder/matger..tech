@@ -4,7 +4,10 @@ import ProductCard from '@/components/ProductCard';
 export default function Home() {
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-8 font-headline">أحدث المنتجات</h1>
+      <div className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold font-headline text-primary animate-pulse">مستقبل التسوق بين يديك</h1>
+        <p className="text-lg text-muted-foreground mt-4">أحدث المنتجات الإلكترونية بتصميم من عالم آخر.</p>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />

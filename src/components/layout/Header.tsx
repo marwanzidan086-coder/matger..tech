@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart, Zap } from 'lucide-react';
+import { ShoppingCart, Zap, User } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -10,13 +10,19 @@ export default function Header() {
   const { cartCount } = useCart();
 
   return (
-    <header className="bg-card shadow-md sticky top-0 z-40">
+    <header className="bg-background/80 backdrop-blur-sm shadow-md shadow-primary/10 sticky top-0 z-40">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <Link href="/" className="flex items-center gap-2 text-2xl font-bold text-primary">
           <Zap className="h-8 w-8" />
           <span className="font-headline">Matgar.tech</span>
         </Link>
-        <nav>
+        <nav className='flex items-center gap-2'>
+           <Link href="/profile">
+            <Button variant="ghost" size="icon">
+              <User className="h-6 w-6" />
+              <span className="sr-only">الملف الشخصي</span>
+            </Button>
+          </Link>
           <Link href="/cart">
             <Button variant="ghost" size="icon" className="relative">
               <ShoppingCart className="h-6 w-6" />
