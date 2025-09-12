@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import type { Product } from "@/lib/types";
+import { siteConfig } from "@/lib/config";
 
 const formSchema = z.object({
   name: z.string().min(3, { message: "الاسم يجب أن يكون 3 أحرف على الأقل" }),
@@ -57,12 +58,11 @@ export default function QuickCheckoutForm({ product }: QuickCheckoutFormProps) {
     }
 
     const values = form.getValues();
-    const whatsappNumber = "201557219572";
     
     const productDetails = `- ${product.name} (الكمية: 1) - السعر: ${product.price.toLocaleString('ar-EG')} جنيه`;
 
     const message = `
-طلب سريع لمنتج واحد من متجر Matgar.tech 🛍️
+طلب سريع لمنتج واحد من متجر ${siteConfig.storeName} 🛍️
 -----------------------------------
 👤 *الاسم:* ${values.name}
 📱 *رقم الهاتف (1):* ${values.phone1}
@@ -79,7 +79,7 @@ ${productDetails}
 💰 *المبلغ الإجمالي:* ${product.price.toLocaleString('ar-EG')} جنيه
 `.trim().replace(/^\s+/gm, '');
 
-    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent(message)}`;
     setWhatsappUrl(url);
 
     toast({

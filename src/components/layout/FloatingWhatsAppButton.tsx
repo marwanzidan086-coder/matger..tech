@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { siteConfig } from '@/lib/config';
 
 const WhatsAppIcon = () => (
   <svg
@@ -13,9 +14,8 @@ const WhatsAppIcon = () => (
 );
 
 export default function FloatingWhatsAppButton() {
-  const whatsappNumber = "201557219572";
-  const message = "مرحبًا، لدي استفسار بخصوص المنتجات المعروضة في متجركم.";
-  const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+  const { whatsappNumber, whatsappDefaultMessage } = siteConfig;
+  const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappDefaultMessage)}`;
 
   return (
     <Link

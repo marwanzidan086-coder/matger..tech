@@ -5,9 +5,10 @@ import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import FloatingWhatsAppButton from '@/components/layout/FloatingWhatsAppButton';
+import { siteConfig } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: 'Matgar Tech Online',
+  title: `${siteConfig.storeName} Online`,
   description: 'متجر إلكتروني حديث ومتكامل لبيع المنتجات الإلكترونية والإكسسوارات',
 };
 

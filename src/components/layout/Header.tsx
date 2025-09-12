@@ -5,6 +5,7 @@ import { ShoppingCart, Zap, Home } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { siteConfig } from '@/lib/config';
 
 export default function Header() {
   const { cartCount } = useCart();
@@ -14,7 +15,7 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <Link href="/" className="flex items-center gap-2 text-2xl font-bold text-primary">
           <Zap className="h-8 w-8" />
-          <span className="font-headline">Matgar.tech</span>
+          <span className="font-headline">{siteConfig.storeName}</span>
         </Link>
         <nav className='flex items-center gap-2'>
            <Link href="/shop">
