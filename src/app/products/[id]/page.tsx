@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Zap, BatteryCharging, Bluetooth, Mic, Palette, Feather, Smartphone, Tablet } from 'lucide-react';
+import { ArrowLeft, Zap, BatteryCharging, Bluetooth, Mic, Palette, Feather, Smartphone, Tablet, Weight, PaintBucket } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import QuickCheckoutForm from './QuickCheckoutForm';
 import type { Product } from '@/lib/types';
@@ -22,11 +22,11 @@ const FeatureIcon = ({ feature }: { feature: string }) => {
     if (lowerFeature.includes('بطارية') || lowerFeature.includes('شحن')) return <BatteryCharging className="h-5 w-5 text-primary" />;
     if (lowerFeature.includes('بلوتوث')) return <Bluetooth className="h-5 w-5 text-primary" />;
     if (lowerFeature.includes('مايك')) return <Mic className="h-5 w-5 text-primary" />;
-    if (lowerFeature.includes('لون')) return <Palette className="h-5 w-5 text-primary" />;
-    if (lowerFeature.includes('خفيفة') || lowerFeature.includes('وزن')) return <Feather className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('لون')) return <PaintBucket className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('خفيفة') || lowerFeature.includes('وزن')) return <Weight className="h-5 w-5 text-primary" />;
     if (lowerFeature.includes('موبايلات')) return <Smartphone className="h-5 w-5 text-primary" />;
     if (lowerFeature.includes('تابلت')) return <Tablet className="h-5 w-5 text-primary" />;
-    return null;
+    return <Zap className="h-5 w-5 text-primary" />;
 }
 
 export default function ProductDetailPage({ params }: { params: { id: string } }) {
@@ -36,17 +36,30 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     notFound();
   }
 
-  const descriptionParts = product.description.split('*').filter(part => part.trim() !== '');
+  const descriptionParts = product.description.split('*').map(s => s.trim().replace(/^1/g, '')).filter(part => part.trim() !== '');
   const mainDescription = descriptionParts.length > 0 ? descriptionParts.shift() : product.description;
   
   const featureLists: { title: string; items: string[] }[] = [];
+  let currentList: { title: string; items: string[] } | null = null;
+
   descriptionParts.forEach(part => {
-    const lines = part.split('\n').map(line => line.trim()).filter(line => line);
+    const lines = part.split('\n').map(line => line.trim().replace(/•/g, '')).filter(line => line);
     if (lines.length > 0) {
-      const title = lines.shift() || 'تفاصيل';
-      featureLists.push({ title, items: lines });
+      if (!lines[0].includes(':')) {
+        if (currentList) {
+          featureLists.push(currentList);
+        }
+        currentList = { title: lines.shift()!, items: lines };
+      } else if (currentList) {
+        currentList.items.push(...lines);
+      }
     }
   });
+
+  if (currentList) {
+    featureLists.push(currentList);
+  }
+
 
   return (
     <div>
@@ -58,7 +71,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
         </Button>
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
             <div>
-                <Carousel className="w-full">
+                <Carousel dir="ltr" className="w-full">
                 <CarouselContent>
                     {product.images.map((img, index) => (
                     <CarouselItem key={index}>
@@ -83,19 +96,19 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 <p className="text-muted-foreground mt-2">{product.category}</p>
                 <p className="text-3xl font-bold text-primary my-4">{product.price.toLocaleString('ar-EG')} جنيه</p>
                 
-                <div className="prose prose-lg max-w-none text-foreground/80 mt-4 mb-6 space-y-6">
+                <div className="prose prose-invert prose-lg max-w-none text-foreground/90 mt-4 mb-6 space-y-6">
                     <p className="lead">{mainDescription}</p>
                     
                     {featureLists.map((list, index) => (
                         <div key={index}>
-                            <h3 className="font-bold text-lg text-primary mb-3">{list.title}</h3>
-                            <ul className="space-y-2 list-none p-0">
+                            <h3 className="font-bold text-xl text-primary mb-3">{list.title}</h3>
+                            <ul className="space-y-3 list-none p-0">
                                 {list.items.map((item, itemIndex) => (
-                                    <li key={itemIndex} className="flex items-start gap-3">
-                                        <div className='mt-1'>
+                                    <li key={itemIndex} className="flex items-start gap-3 p-2 rounded-md bg-card/50">
+                                        <div className='mt-1 flex-shrink-0'>
                                             <FeatureIcon feature={item} />
                                         </div>
-                                        <span>{item.replace(/•/g, '').trim()}</span>
+                                        <span>{item}</span>
                                     </li>
                                 ))}
                             </ul>
