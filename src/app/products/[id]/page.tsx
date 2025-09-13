@@ -1,19 +1,15 @@
 
-'use client';
-
 import { products } from '@/lib/data/products';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Zap, BatteryCharging, Bluetooth, Mic, Smartphone, Tablet, Weight, PaintBucket, Truck, Box, Tag, ShieldCheck, Gamepad, Film, Car, ShoppingCart, Heart } from 'lucide-react';
+import { ArrowLeft, Zap, BatteryCharging, Bluetooth, Mic, Smartphone, Tablet, Weight, PaintBucket, Truck, Box, Tag, ShieldCheck, Gamepad, Film, Car, Feather } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import QuickCheckoutForm from './QuickCheckoutForm';
 import type { Product } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
-import { useCart } from '@/context/CartContext';
-import { useToast } from '@/hooks/use-toast';
 
 // Custom icon for Kitchen as it might not exist in all versions
 const Kitchen = (props: React.SVGProps<SVGSVGElement>) => (
@@ -56,33 +52,15 @@ const FeatureIcon = ({ feature }: { feature: string }) => {
     if (lowerFeature.includes('تلفزيون') || lowerFeature.includes('فيلم')) return <Film className="h-5 w-5 text-primary" />;
     if (lowerFeature.includes('سيارة')) return <Car className="h-5 w-5 text-primary" />;
     if (lowerFeature.includes('مطبخ') || lowerFeature.includes('تقطيع')) return <Kitchen className="h-5 w-5 text-primary" />;
-    return <Tag className="h-5 w-5 text-primary" />;
+    return <Feather className="h-5 w-5 text-primary" />;
 }
 
 export default function ProductDetailPage({ params }: { params: { id: string } }) {
-  const { addToCart } = useCart();
-  const { toast } = useToast();
   const product = products.find(p => p.id === parseInt(params.id));
 
   if (!product) {
     notFound();
   }
-
-  const handleAddToCart = () => {
-    addToCart(product);
-    toast({
-      title: "تمت الإضافة إلى السلة",
-      description: `تمت إضافة "${product.name}" إلى عربة التسوق بنجاح.`,
-    });
-  };
-  
-  const handleAddToFavorites = () => {
-    // TODO: Implement favorite functionality
-    toast({
-      title: "تمت الإضافة إلى المفضلة",
-      description: `تمت إضافة "${product.name}" إلى المفضلة بنجاح.`,
-    });
-  };
 
   // تقسيم الوصف إلى أجزاء بناءً على علامة (*)
   const descriptionParts = product.description.split('*').map(s => s.trim()).filter(part => part.trim() !== '');
@@ -151,16 +129,6 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 <p className="text-muted-foreground mb-2">{product.category}</p>
                 <h1 className="text-3xl md:text-4xl font-bold font-headline">{product.name}</h1>
                 <p className="text-3xl font-bold text-primary my-4">{product.price.toLocaleString('ar-EG')} جنيه</p>
-                
-                <div className="flex gap-2 my-4">
-                  <Button onClick={handleAddToCart} size="lg" className="flex-grow">
-                    <ShoppingCart className="ml-2 h-5 w-5" />
-                    إضافة إلى السلة
-                  </Button>
-                  <Button onClick={handleAddToFavorites} variant="outline" size="icon" className="flex-shrink-0 hover:bg-destructive/10 hover:text-destructive border-destructive/20 text-destructive/80">
-                    <Heart className="h-5 w-5" />
-                  </Button>
-                </div>
                 
                 <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 py-2 px-4 rounded-lg w-fit text-base mb-6">
                   <Truck className="ml-2 h-5 w-5" />

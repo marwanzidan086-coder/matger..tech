@@ -1,43 +1,15 @@
-'use client';
 
 import type { Product } from '@/lib/types';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Heart, ShoppingCart } from 'lucide-react';
-import { useCart } from '@/context/CartContext';
-import { useToast } from '@/hooks/use-toast';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addToCart } = useCart();
-  const { toast } = useToast();
-  const imageHint = product.category.toLowerCase().split(' ').slice(0, 2).join(' ');
-
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    addToCart(product);
-    toast({
-      title: "تمت الإضافة إلى السلة",
-      description: `تمت إضافة "${product.name}" إلى عربة التسوق بنجاح.`,
-      variant: 'default',
-    });
-  };
-
-  const handleAddToFavorites = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // TODO: Implement favorite functionality
-    toast({
-      title: "تمت الإضافة إلى المفضلة",
-      description: `تمت إضافة "${product.name}" إلى المفضلة بنجاح.`,
-    });
-  };
+    const imageHint = product.category.toLowerCase().split(' ').slice(0, 2).join(' ');
 
   return (
     <Card className="flex flex-col overflow-hidden transition-all duration-300 ease-in-out border-primary/20 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 hover:scale-105 bg-card/50">
@@ -62,17 +34,9 @@ export default function ProductCard({ product }: ProductCardProps) {
           </CardTitle>
           <p className="text-muted-foreground text-sm mt-auto">{product.category}</p>
         </CardContent>
-        <CardFooter className="p-4 flex flex-col items-start gap-3">
+        <CardFooter className="p-4 flex items-center justify-between">
           <p className="text-xl font-bold text-primary">{product.price.toLocaleString('ar-EG')} جنيه</p>
-          <div className="w-full flex gap-2">
-            <Button onClick={handleAddToCart} size="sm" className="flex-grow bg-primary/90 hover:bg-primary">
-              <ShoppingCart className="ml-2 h-4 w-4" />
-              <span>إضافة للسلة</span>
-            </Button>
-            <Button onClick={handleAddToFavorites} variant="outline" size="icon" className="flex-shrink-0 hover:bg-destructive/10 hover:text-destructive border-destructive/20 text-destructive/80">
-              <Heart className="h-4 w-4" />
-            </Button>
-          </div>
+          <span className="text-sm text-muted-foreground">عرض التفاصيل</span>
         </CardFooter>
       </Link>
     </Card>
