@@ -8,10 +8,7 @@
     "start": "npx next start",
     "lint": "npx next lint",
     "typecheck": "tsc --noEmit",
-    "expose": "npx ngrok http 9002",
-    "firebase:login": "npx firebase login",
-    "firebase:use": "npx firebase use --add",
-    "deploy": "npm run build && firebase deploy --only hosting"
+    "expose": "npx ngrok http 9002"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",
