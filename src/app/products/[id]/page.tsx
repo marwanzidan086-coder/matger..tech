@@ -5,10 +5,11 @@ import { notFound } from 'next/navigation';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Zap, BatteryCharging, Bluetooth, Mic, Palette, Feather, Smartphone, Tablet, Weight, PaintBucket } from 'lucide-react';
+import { ArrowLeft, Zap, BatteryCharging, Bluetooth, Mic, Palette, Feather, Smartphone, Tablet, Weight, PaintBucket, Truck } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import QuickCheckoutForm from './QuickCheckoutForm';
 import type { Product } from '@/lib/types';
+import { Badge } from '@/components/ui/badge';
 
 export async function generateStaticParams() {
   return products.map((product) => ({
@@ -96,7 +97,12 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 <p className="text-muted-foreground mt-2">{product.category}</p>
                 <p className="text-3xl font-bold text-primary my-4">{product.price.toLocaleString('ar-EG')} جنيه</p>
                 
-                <div className="prose prose-invert prose-lg max-w-none text-foreground/90 mt-4 mb-6 space-y-6">
+                <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 py-2 px-4 rounded-lg w-fit">
+                  <Truck className="ml-2 h-5 w-5" />
+                  <span className="font-semibold">التوصيل مجاني لأول طلب</span>
+                </Badge>
+
+                <div className="prose prose-invert prose-lg max-w-none text-foreground/90 mt-8 mb-6 space-y-6">
                     <p className="lead">{mainDescription}</p>
                     
                     {featureLists.map((list, index) => (
