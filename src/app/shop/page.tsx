@@ -3,6 +3,7 @@ import { products } from '@/lib/data/products';
 import ProductCard from '@/components/ProductCard';
 
 export default function ShopPage() {
+  const displayedProducts = [...products].reverse();
   return (
     <div>
       <div className="text-center mb-12">
@@ -10,7 +11,7 @@ export default function ShopPage() {
         <p className="text-lg text-muted-foreground mt-4">أحدث المنتجات الإلكترونية بتصميم من عالم آخر.</p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product) => (
+        {displayedProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
