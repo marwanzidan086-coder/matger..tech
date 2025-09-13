@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Zap, BatteryCharging, Bluetooth, Mic, Palette, Feather, Smartphone, Tablet, Weight, PaintBucket, Truck } from 'lucide-react';
+import { ArrowLeft, Zap, BatteryCharging, Bluetooth, Mic, Palette, Feather, Smartphone, Tablet, Weight, PaintBucket, Truck, Box, Tag, ShieldCheck } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import QuickCheckoutForm from './QuickCheckoutForm';
 import type { Product } from '@/lib/types';
@@ -19,15 +19,17 @@ export async function generateStaticParams() {
 
 const FeatureIcon = ({ feature }: { feature: string }) => {
     const lowerFeature = feature.toLowerCase();
-    if (lowerFeature.includes('صوت')) return <Zap className="h-5 w-5 text-primary" />;
-    if (lowerFeature.includes('بطارية') || lowerFeature.includes('شحن')) return <BatteryCharging className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('صوت') || lowerFeature.includes('bass')) return <Zap className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('بطارية') || lowerFeature.includes('شحن') || lowerFeature.includes('power')) return <BatteryCharging className="h-5 w-5 text-primary" />;
     if (lowerFeature.includes('بلوتوث')) return <Bluetooth className="h-5 w-5 text-primary" />;
-    if (lowerFeature.includes('مايك')) return <Mic className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('مايك') || lowerFeature.includes('ميكروفون')) return <Mic className="h-5 w-5 text-primary" />;
     if (lowerFeature.includes('لون')) return <PaintBucket className="h-5 w-5 text-primary" />;
-    if (lowerFeature.includes('خفيفة') || lowerFeature.includes('وزن')) return <Weight className="h-5 w-5 text-primary" />;
-    if (lowerFeature.includes('موبايلات')) return <Smartphone className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('خفيف') || lowerFeature.includes('وزن')) return <Weight className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('موبايل')) return <Smartphone className="h-5 w-5 text-primary" />;
     if (lowerFeature.includes('تابلت')) return <Tablet className="h-5 w-5 text-primary" />;
-    return <Zap className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('شاشة')) return <Tablet className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('آمن') || lowerFeature.includes('حماية')) return <ShieldCheck className="h-5 w-5 text-primary" />;
+    return <Tag className="h-5 w-5 text-primary" />;
 }
 
 export default function ProductDetailPage({ params }: { params: { id: string } }) {
@@ -44,16 +46,26 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   let currentList: { title: string; items: string[] } | null = null;
 
   descriptionParts.forEach(part => {
-    const lines = part.split('\n').map(line => line.trim().replace(/•/g, '')).filter(line => line);
+    const lines = part.split('\n').map(line => line.trim().replace(/[•-]/g, '')).filter(line => line);
     if (lines.length > 0) {
-      if (!lines[0].includes(':')) {
-        if (currentList) {
-          featureLists.push(currentList);
+        const potentialTitle = lines[0].replace(/:/g, '').trim();
+        if(lines.length > 1 && !lines[1].startsWith('•') && !lines[1].startsWith('-') ) {
+            if (currentList) {
+                featureLists.push(currentList);
+            }
+            currentList = { title: potentialTitle, items: lines.slice(1) };
+        } else if (lines.length === 1 && potentialTitle.length < 30) {
+             if (currentList) {
+                featureLists.push(currentList);
+            }
+            currentList = { title: potentialTitle, items: [] };
         }
-        currentList = { title: lines.shift()!, items: lines };
-      } else if (currentList) {
-        currentList.items.push(...lines);
-      }
+        else {
+            if (!currentList) {
+                currentList = { title: "المميزات", items: [] };
+            }
+            currentList.items.push(...lines);
+        }
     }
   });
 
@@ -93,13 +105,13 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 </Carousel>
             </div>
             <div className="flex flex-col">
+                <p className="text-muted-foreground mb-2">{product.category}</p>
                 <h1 className="text-3xl md:text-4xl font-bold font-headline">{product.name}</h1>
-                <p className="text-muted-foreground mt-2">{product.category}</p>
                 <p className="text-3xl font-bold text-primary my-4">{product.price.toLocaleString('ar-EG')} جنيه</p>
                 
-                <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 py-2 px-4 rounded-lg w-fit">
+                <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 py-2 px-4 rounded-lg w-fit text-base">
                   <Truck className="ml-2 h-5 w-5" />
-                  <span className="font-semibold">التوصيل مجاني لأول طلب</span>
+                  <span className="font-semibold">عرض خاص: التوصيل مجاني لأول طلب</span>
                 </Badge>
 
                 <div className="prose prose-invert prose-lg max-w-none text-foreground/90 mt-8 mb-6 space-y-6">
@@ -110,7 +122,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                             <h3 className="font-bold text-xl text-primary mb-3">{list.title}</h3>
                             <ul className="space-y-3 list-none p-0">
                                 {list.items.map((item, itemIndex) => (
-                                    <li key={itemIndex} className="flex items-start gap-3 p-2 rounded-md bg-card/50">
+                                    <li key={itemIndex} className="flex items-start gap-3 p-3 rounded-md bg-card/50 border border-border">
                                         <div className='mt-1 flex-shrink-0'>
                                             <FeatureIcon feature={item} />
                                         </div>
@@ -123,12 +135,16 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 </div>
             </div>
         </div>
-        <div className="mt-12 max-w-2xl mx-auto">
-            <Card>
+        <div className="mt-16 pt-12 border-t border-primary/20">
+             <Card className="max-w-2xl mx-auto bg-card/50 border-primary/20 shadow-lg shadow-primary/5">
                 <CardHeader>
-                    <CardTitle className="text-center text-2xl font-bold text-primary">اطلب هذا المنتج الآن</CardTitle>
+                    <CardTitle className="text-center text-2xl font-bold text-primary flex items-center justify-center gap-2">
+                        <Box className="h-8 w-8"/>
+                        <span>اطلب هذا المنتج الآن</span>
+                    </CardTitle>
                 </CardHeader>
                 <CardContent>
+                    <p className='text-center text-muted-foreground mb-6'>املأ بياناتك وسيتم تجهيز طلبك فورًا لإرساله عبر واتساب.</p>
                     <QuickCheckoutForm product={product} />
                 </CardContent>
             </Card>
