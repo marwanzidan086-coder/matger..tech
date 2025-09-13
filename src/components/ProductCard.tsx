@@ -12,8 +12,8 @@ export default function ProductCard({ product }: ProductCardProps) {
     const imageHint = product.category.toLowerCase().split(' ').slice(0, 2).join(' ');
 
   return (
-    <Card className="flex flex-col overflow-hidden transition-all duration-300 ease-in-out border-primary/20 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 hover:scale-105 bg-card/50">
-      <Link href={`/products/${product.id}`} className="flex flex-col h-full group">
+    <Card className="flex flex-col overflow-hidden transition-all duration-300 ease-in-out border-primary/20 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 hover:scale-105 bg-card/50 group">
+      <Link href={`/products/${product.id}`}>
         <CardHeader className="p-0">
           <div className="relative aspect-square w-full">
             <Image
@@ -26,19 +26,21 @@ export default function ProductCard({ product }: ProductCardProps) {
             />
           </div>
         </CardHeader>
-        <CardContent className="p-4 flex-grow flex flex-col">
-          <CardTitle className="text-lg font-bold mb-2 h-14 line-clamp-2 text-foreground">
-            <Link href={`/products/${product.id}`} className="hover:underline">
-              {product.name}
-            </Link>
-          </CardTitle>
-          <p className="text-muted-foreground text-sm mt-auto">{product.category}</p>
-        </CardContent>
-        <CardFooter className="p-4 flex items-center justify-between">
-          <p className="text-xl font-bold text-primary">{product.price.toLocaleString('ar-EG')} جنيه</p>
-          <span className="text-sm text-muted-foreground">عرض التفاصيل</span>
-        </CardFooter>
       </Link>
+      <CardContent className="p-4 flex-grow flex flex-col">
+        <CardTitle className="text-lg font-bold mb-2 h-14 line-clamp-2 text-foreground">
+          <Link href={`/products/${product.id}`} className="hover:underline">
+            {product.name}
+          </Link>
+        </CardTitle>
+        <p className="text-muted-foreground text-sm mt-auto">{product.category}</p>
+      </CardContent>
+      <CardFooter className="p-4 flex items-center justify-between">
+        <p className="text-xl font-bold text-primary">{product.price.toLocaleString('ar-EG')} جنيه</p>
+        <Link href={`/products/${product.id}`} className="text-sm text-muted-foreground hover:text-primary">
+          عرض التفاصيل
+        </Link>
+      </CardFooter>
     </Card>
   );
 }
