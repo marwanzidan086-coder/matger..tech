@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Zap, BatteryCharging, Bluetooth, Mic, Palette, Feather, Smartphone, Tablet } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import QuickCheckoutForm from './QuickCheckoutForm';
 import type { Product } from '@/lib/types';
@@ -16,12 +16,37 @@ export async function generateStaticParams() {
   }));
 }
 
+const FeatureIcon = ({ feature }: { feature: string }) => {
+    const lowerFeature = feature.toLowerCase();
+    if (lowerFeature.includes('صوت')) return <Zap className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('بطارية') || lowerFeature.includes('شحن')) return <BatteryCharging className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('بلوتوث')) return <Bluetooth className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('مايك')) return <Mic className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('لون')) return <Palette className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('خفيفة') || lowerFeature.includes('وزن')) return <Feather className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('موبايلات')) return <Smartphone className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('تابلت')) return <Tablet className="h-5 w-5 text-primary" />;
+    return null;
+}
+
 export default function ProductDetailPage({ params }: { params: { id: string } }) {
   const product = products.find(p => p.id === parseInt(params.id));
 
   if (!product) {
     notFound();
   }
+
+  const descriptionParts = product.description.split('*').filter(part => part.trim() !== '');
+  const mainDescription = descriptionParts.length > 0 ? descriptionParts.shift() : product.description;
+  
+  const featureLists: { title: string; items: string[] }[] = [];
+  descriptionParts.forEach(part => {
+    const lines = part.split('\n').map(line => line.trim()).filter(line => line);
+    if (lines.length > 0) {
+      const title = lines.shift() || 'تفاصيل';
+      featureLists.push({ title, items: lines });
+    }
+  });
 
   return (
     <div>
@@ -57,8 +82,25 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 <h1 className="text-3xl md:text-4xl font-bold font-headline">{product.name}</h1>
                 <p className="text-muted-foreground mt-2">{product.category}</p>
                 <p className="text-3xl font-bold text-primary my-4">{product.price.toLocaleString('ar-EG')} جنيه</p>
-                <div className="prose prose-lg max-w-none text-foreground/80 mt-4 mb-6">
-                <p>{product.description}</p>
+                
+                <div className="prose prose-lg max-w-none text-foreground/80 mt-4 mb-6 space-y-6">
+                    <p className="lead">{mainDescription}</p>
+                    
+                    {featureLists.map((list, index) => (
+                        <div key={index}>
+                            <h3 className="font-bold text-lg text-primary mb-3">{list.title}</h3>
+                            <ul className="space-y-2 list-none p-0">
+                                {list.items.map((item, itemIndex) => (
+                                    <li key={itemIndex} className="flex items-start gap-3">
+                                        <div className='mt-1'>
+                                            <FeatureIcon feature={item} />
+                                        </div>
+                                        <span>{item.replace(/•/g, '').trim()}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
