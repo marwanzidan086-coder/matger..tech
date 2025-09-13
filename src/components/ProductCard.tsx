@@ -1,16 +1,44 @@
+
+'use client';
+
 import type { Product } from '@/lib/types';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { Heart, ShoppingCart } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
+import { useToast } from '@/hooks/use-toast';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const { addToCart } = useCart();
+  const { toast } = useToast();
   const imageHint = product.category.toLowerCase().split(' ').slice(0, 2).join(' ');
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart(product);
+    toast({
+      title: "تمت الإضافة إلى السلة",
+      description: `تمت إضافة "${product.name}" إلى عربة التسوق بنجاح.`,
+      variant: 'default',
+    });
+  };
+
+  const handleAddToFavorites = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // TODO: Implement favorite functionality
+    toast({
+      title: "تمت الإضافة إلى المفضلة",
+      description: `تمت إضافة "${product.name}" إلى المفضلة بنجاح.`,
+    });
+  };
 
   return (
     <Card className="flex flex-col overflow-hidden transition-all duration-300 ease-in-out border-primary/20 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 hover:scale-105 bg-card/50">
@@ -27,16 +55,25 @@ export default function ProductCard({ product }: ProductCardProps) {
             />
           </div>
         </CardHeader>
-        <div className="p-4 flex-grow flex flex-col">
-          <CardTitle className="text-lg font-bold mb-2 h-14 line-clamp-2 text-foreground">{product.name}</CardTitle>
+        <CardContent className="p-4 flex-grow flex flex-col">
+          <CardTitle className="text-lg font-bold mb-2 h-14 line-clamp-2 text-foreground">
+            <Link href={`/products/${product.id}`} className="hover:underline">
+              {product.name}
+            </Link>
+          </CardTitle>
           <p className="text-muted-foreground text-sm mt-auto">{product.category}</p>
-        </div>
-        <CardFooter className="p-4 flex justify-between items-center">
+        </CardContent>
+        <CardFooter className="p-4 flex flex-col items-start gap-3">
           <p className="text-xl font-bold text-primary">{product.price.toLocaleString('ar-EG')} جنيه</p>
-          <Button variant="ghost" size="sm" className="text-primary group-hover:text-accent-foreground group-hover:bg-primary">
-            <span className='group-hover:hidden'>التفاصيل</span>
-            <ArrowLeft className="hidden group-hover:block h-5 w-5" />
-          </Button>
+          <div className="w-full flex gap-2">
+            <Button onClick={handleAddToCart} size="sm" className="flex-grow bg-primary/90 hover:bg-primary">
+              <ShoppingCart className="ml-2 h-4 w-4" />
+              <span>إضافة للسلة</span>
+            </Button>
+            <Button onClick={handleAddToFavorites} variant="outline" size="icon" className="flex-shrink-0 hover:bg-destructive/10 hover:text-destructive border-destructive/20 text-destructive/80">
+              <Heart className="h-4 w-4" />
+            </Button>
+          </div>
         </CardFooter>
       </Link>
     </Card>

@@ -1,8 +1,9 @@
+
 'use client';
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShoppingCart, Home } from 'lucide-react';
+import { ShoppingCart, Home, Heart } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -31,6 +32,10 @@ export default function Header() {
               <span className="sr-only">المتجر</span>
             </Button>
           </Link>
+           <Button variant="ghost" size="icon">
+              <Heart className="h-6 w-6" />
+              <span className="sr-only">المفضلة</span>
+            </Button>
           <Link href="/cart">
             <Button variant="ghost" size="icon" className="relative">
               <ShoppingCart className="h-6 w-6" />
