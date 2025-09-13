@@ -5,30 +5,35 @@ import { notFound } from 'next/navigation';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Zap, BatteryCharging, Bluetooth, Mic, Palette, Feather, Smartphone, Tablet, Weight, PaintBucket, Truck, Box, Tag, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Zap, BatteryCharging, Bluetooth, Mic, Palette, Feather, Smartphone, Tablet, Weight, PaintBucket, Truck, Box, Tag, ShieldCheck, Gamepad, Wifi, Film, Car, Kitchen } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import QuickCheckoutForm from './QuickCheckoutForm';
 import type { Product } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 
+// هذه الدالة تقوم بتجهيز الصفحات مسبقًا عند بناء الموقع
 export async function generateStaticParams() {
   return products.map((product) => ({
     id: product.id.toString(),
   }));
 }
 
+// هذه الدالة تختار أيقونة مناسبة لكل ميزة بناءً على الكلمات الرئيسية
 const FeatureIcon = ({ feature }: { feature: string }) => {
     const lowerFeature = feature.toLowerCase();
     if (lowerFeature.includes('صوت') || lowerFeature.includes('bass')) return <Zap className="h-5 w-5 text-primary" />;
     if (lowerFeature.includes('بطارية') || lowerFeature.includes('شحن') || lowerFeature.includes('power')) return <BatteryCharging className="h-5 w-5 text-primary" />;
-    if (lowerFeature.includes('بلوتوث')) return <Bluetooth className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('بلوتوث') || lowerFeature.includes('wi-fi')) return <Bluetooth className="h-5 w-5 text-primary" />;
     if (lowerFeature.includes('مايك') || lowerFeature.includes('ميكروفون')) return <Mic className="h-5 w-5 text-primary" />;
     if (lowerFeature.includes('لون')) return <PaintBucket className="h-5 w-5 text-primary" />;
     if (lowerFeature.includes('خفيف') || lowerFeature.includes('وزن')) return <Weight className="h-5 w-5 text-primary" />;
     if (lowerFeature.includes('موبايل')) return <Smartphone className="h-5 w-5 text-primary" />;
-    if (lowerFeature.includes('تابلت')) return <Tablet className="h-5 w-5 text-primary" />;
-    if (lowerFeature.includes('شاشة')) return <Tablet className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('تابلت') || lowerFeature.includes('شاشة')) return <Tablet className="h-5 w-5 text-primary" />;
     if (lowerFeature.includes('آمن') || lowerFeature.includes('حماية')) return <ShieldCheck className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('لعب') || lowerFeature.includes('جيم')) return <Gamepad className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('تلفزيون') || lowerFeature.includes('فيلم')) return <Film className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('سيارة')) return <Car className="h-5 w-5 text-primary" />;
+    if (lowerFeature.includes('مطبخ') || lowerFeature.includes('تقطيع')) return <Kitchen className="h-5 w-5 text-primary" />;
     return <Tag className="h-5 w-5 text-primary" />;
 }
 
@@ -39,28 +44,26 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
     notFound();
   }
 
-  const descriptionParts = product.description.split('*').map(s => s.trim().replace(/^1/g, '')).filter(part => part.trim() !== '');
+  // تقسيم الوصف إلى أجزاء بناءً على علامة (*)
+  const descriptionParts = product.description.split('*').map(s => s.trim()).filter(part => part.trim() !== '');
   const mainDescription = descriptionParts.length > 0 ? descriptionParts.shift() : product.description;
   
   const featureLists: { title: string; items: string[] }[] = [];
   let currentList: { title: string; items: string[] } | null = null;
 
+  // تنظيم المميزات والتفاصيل في قوائم
   descriptionParts.forEach(part => {
-    const lines = part.split('\n').map(line => line.trim().replace(/[•-]/g, '')).filter(line => line);
+    const lines = part.split('\n').map(line => line.trim().replace(/^[•-]/g, '').trim()).filter(line => line);
     if (lines.length > 0) {
         const potentialTitle = lines[0].replace(/:/g, '').trim();
-        if(lines.length > 1 && !lines[1].startsWith('•') && !lines[1].startsWith('-') ) {
+        const isTitle = ["مميزات المنتج", "تفاصيل سريعة"].includes(potentialTitle);
+        
+        if(isTitle) {
             if (currentList) {
                 featureLists.push(currentList);
             }
             currentList = { title: potentialTitle, items: lines.slice(1) };
-        } else if (lines.length === 1 && potentialTitle.length < 30) {
-             if (currentList) {
-                featureLists.push(currentList);
-            }
-            currentList = { title: potentialTitle, items: [] };
-        }
-        else {
+        } else {
             if (!currentList) {
                 currentList = { title: "المميزات", items: [] };
             }
@@ -109,12 +112,12 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 <h1 className="text-3xl md:text-4xl font-bold font-headline">{product.name}</h1>
                 <p className="text-3xl font-bold text-primary my-4">{product.price.toLocaleString('ar-EG')} جنيه</p>
                 
-                <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 py-2 px-4 rounded-lg w-fit text-base">
+                <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 py-2 px-4 rounded-lg w-fit text-base mb-6">
                   <Truck className="ml-2 h-5 w-5" />
                   <span className="font-semibold">عرض الافتتاح: الشحن مجاني!</span>
                 </Badge>
 
-                <div className="prose prose-invert prose-lg max-w-none text-foreground/90 mt-8 mb-6 space-y-6">
+                <div className="prose prose-invert prose-lg max-w-none text-foreground/90 space-y-6">
                     <p className="lead">{mainDescription}</p>
                     
                     {featureLists.map((list, index) => (
