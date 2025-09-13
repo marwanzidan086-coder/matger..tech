@@ -15,11 +15,11 @@ export const productImages: ProductImageData[] = [
   {
     id: 1,
     images: [
-      "https://i.ibb.co/v6YJz9t/N-1.jpg",
-      "https://i.ibb.co/SDYLDd9/9.jpg",
-      "https://i.ibb.co/fYgRnvN/R-1.jpg",
-      "https://i.ibb.co/jZ34JYt/Q-1.jpg",
-      "https://i.ibb.co/d0NjmfB/f-1.jpg",
+      "https://i.ibb.co/0j8JTDqS/image-1.jpg",
+      "https://i.ibb.co/vCnQXQpq/image-2.png",
+      "https://i.ibb.co/S7w580Y1/image-3.jpg",
+      "https://i.ibb.co/3yW8MGFh/image-4.jpg",
+      "https://i.ibb.co/67Xmd1v0/image-5.jpg"
     ],
   },
   {
