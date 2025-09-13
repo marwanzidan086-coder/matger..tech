@@ -5,11 +5,36 @@ import { notFound } from 'next/navigation';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Zap, BatteryCharging, Bluetooth, Mic, Smartphone, Tablet, Weight, PaintBucket, Truck, Box, Tag, ShieldCheck, Gamepad, Film, Car, Kitchen } from 'lucide-react';
+import { ArrowLeft, Zap, BatteryCharging, Bluetooth, Mic, Smartphone, Tablet, Weight, PaintBucket, Truck, Box, Tag, ShieldCheck, Gamepad, Film, Car } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import QuickCheckoutForm from './QuickCheckoutForm';
 import type { Product } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
+
+// Custom icon for Kitchen as it might not exist in all versions
+const Kitchen = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M2 21h20" />
+    <path d="M5 21V5c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2v16" />
+    <path d="M12 11v6" />
+    <path d="M9 11v6" />
+    <path d="M15 11v6" />
+    <path d="M9 5V3" />
+    <path d="M15 5V3" />
+  </svg>
+);
+
 
 // هذه الدالة تقوم بتجهيز الصفحات مسبقًا عند بناء الموقع
 export async function generateStaticParams() {
