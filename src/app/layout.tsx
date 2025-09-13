@@ -8,7 +8,7 @@ import FloatingWhatsAppButton from '@/components/layout/FloatingWhatsAppButton';
 import { siteConfig } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: `${siteConfig.storeName} Online`,
+  title: `${siteConfig.storeName} | توصيل مجاني لأول طلب`,
   description: 'متجر إلكتروني حديث ومتكامل لبيع المنتجات الإلكترونية والإكسسوارات',
 };
 
