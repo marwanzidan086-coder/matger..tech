@@ -65,7 +65,15 @@ export const productImages: ProductImageData[] = [
   },
   {
     id: 8,
-    images: ["https://picsum.photos/seed/8/600/600", `https://picsum.photos/seed/81/600/600`, `https://picsum.photos/seed/82/600/600`],
+    images: [
+      "https://i.ibb.co/jP95Sxh6/image-1.jpg",
+      "https://i.ibb.co/WWmybCkC/image-2.jpg",
+      "https://i.ibb.co/QjK7LRJs/image-3.jpg",
+      "https://i.ibb.co/4ndkKtjt/image-4.jpg",
+      "https://i.ibb.co/sd2GJ97k/image-5.jpg",
+      "https://i.ibb.co/4ycxrSY/image-6.jpg",
+      "https://i.ibb.co/C3DpC01s/image-7.png"
+    ],
   },
   {
     id: 9,
