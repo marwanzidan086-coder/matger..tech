@@ -111,7 +111,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 
                 <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20 py-2 px-4 rounded-lg w-fit text-base">
                   <Truck className="ml-2 h-5 w-5" />
-                  <span className="font-semibold">عرض خاص: التوصيل مجاني لأول طلب</span>
+                  <span className="font-semibold">عرض الافتتاح: الشحن مجاني!</span>
                 </Badge>
 
                 <div className="prose prose-invert prose-lg max-w-none text-foreground/90 mt-8 mb-6 space-y-6">
