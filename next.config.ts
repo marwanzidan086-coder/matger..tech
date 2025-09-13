@@ -2,6 +2,7 @@ import type {NextConfig} from 'next';
 
 const nextConfig: NextConfig = {
   /* config options here */
+  output: 'export',
   staticPageGenerationTimeout: 1000,
   typescript: {
     ignoreBuildErrors: true,
