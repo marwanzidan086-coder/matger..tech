@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 9002 -H 0.0.0.0",
+    "dev": "npx next dev -p 9002 -H 0.0.0.0",
     "build": "npx next build",
-    "start": "next start",
-    "lint": "next lint",
+    "start": "npx next start",
+    "lint": "npx next lint",
     "typecheck": "tsc --noEmit",
-    "expose": "ngrok http 9002",
+    "expose": "npx ngrok http 9002",
     "firebase:login": "npx firebase login",
     "firebase:use": "npx firebase use --add",
     "deploy": "npm run build && npx firebase deploy --only hosting"
