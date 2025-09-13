@@ -1,4 +1,5 @@
-import { Phone, Zap } from 'lucide-react';
+import { Phone } from 'lucide-react';
+import Image from 'next/image';
 import { siteConfig } from '@/lib/config';
 
 export default function Footer() {
@@ -6,7 +7,13 @@ export default function Footer() {
     <footer className="bg-background border-t border-primary/10 mt-12">
       <div className="container mx-auto px-4 py-6 text-center text-muted-foreground">
         <div className='flex justify-center items-center gap-2 mb-4'>
-            <Zap className="h-6 w-6 text-primary" />
+            <Image 
+              src="https://i.ibb.co/GKmyTST/Whats-App-Image-2025-09-13-at-11-57-30-e3e74d1c.jpg" 
+              alt={`${siteConfig.storeName} Logo`}
+              width={24} 
+              height={24} 
+              className="rounded-md"
+            />
             <p className="font-bold text-lg text-foreground">{siteConfig.storeName}</p>
         </div>
         <p className="mb-2">&copy; {new Date().getFullYear()} {siteConfig.storeName}. جميع الحقوق محفوظة.</p>
