@@ -3,7 +3,7 @@ import { products } from '@/lib/data/products';
 import ProductCard from '@/components/ProductCard';
 
 export default function ShopPage() {
-  const displayedProducts = [...products].reverse();
+  const displayedProducts = products;
   return (
     <div>
       <div className="text-center mb-12">
