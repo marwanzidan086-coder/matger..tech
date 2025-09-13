@@ -11,7 +11,7 @@
     "expose": "npx ngrok http 9002",
     "firebase:login": "npx firebase login",
     "firebase:use": "npx firebase use --add",
-    "deploy": "firebase deploy --only hosting"
+    "deploy": "npm run build && firebase deploy --only hosting"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",
