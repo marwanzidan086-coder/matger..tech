@@ -15,8 +15,10 @@ export const productImages: ProductImageData[] = [
   {
     id: 1,
     images: [
-      `https://picsum.photos/seed/p1-1/800/800`,
-      `https://picsum.photos/seed/p1-2/800/800`,
+      "https://i.ibb.co/L5hKzBr/image.png",
+      "https://i.ibb.co/k2q2wW7/image.png",
+      "https://i.ibb.co/ZJ2v9vM/image.png",
+      "https://i.ibb.co/hR01fht/image.png"
     ],
   },
   {
@@ -63,8 +65,11 @@ export const productImages: ProductImageData[] = [
   {
     id: 6,
     images: [
-        `https://picsum.photos/seed/p6-1/800/800`,
-        `https://picsum.photos/seed/p6-2/800/800`,
+      "https://i.ibb.co/k3t79S0/image.png",
+      "https://i.ibb.co/FWSy10R/image.png",
+      "https://i.ibb.co/3sH32sB/image.png",
+      "https://i.ibb.co/Vp8p3jF/image.png",
+      "https://i.ibb.co/wJvBGLp/image.png"
     ],
   },
   {
