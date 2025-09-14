@@ -39,6 +39,15 @@ const nextConfig: NextConfig = {
       }
     ],
   },
+  // Allow cross-origin requests in development from the preview environment
+  ...(process.env.NODE_ENV === 'development' && {
+    experimental: {
+      allowedDevOrigins: [
+        'https://*.cloudworkstations.dev',
+        'https://*.firebase.studio',
+      ],
+    },
+  }),
 };
 
 export default nextConfig;
