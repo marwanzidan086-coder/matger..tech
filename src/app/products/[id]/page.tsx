@@ -11,6 +11,13 @@ import QuickCheckoutForm from './QuickCheckoutForm';
 import type { Product } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 
+// Required for static export with dynamic routes
+export async function generateStaticParams() {
+  return products.map((product) => ({
+    id: product.id.toString(),
+  }));
+}
+
 // Custom icon for Kitchen as it might not exist in all versions
 const Kitchen = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
