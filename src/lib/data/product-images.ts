@@ -112,13 +112,4 @@ export const productImages: ProductImageData[] = [
       "https://i.ibb.co/CKsCVW5S/image-6.jpg"
     ],
   },
-  {
-    id: 11,
-    images: [
-      "https://i.ibb.co/y4J06q3/image.png",
-      "https://i.ibb.co/fDbBCqG/image.png",
-      "https://i.ibb.co/f8s7XyF/image.png",
-      "https://i.ibb.co/MfZgXX9/image.png"
-    ],
-  },
 ];
