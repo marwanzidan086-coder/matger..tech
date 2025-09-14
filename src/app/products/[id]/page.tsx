@@ -5,10 +5,9 @@ import { notFound } from 'next/navigation';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Zap, BatteryCharging, Bluetooth, Mic, Smartphone, Tablet, Weight, PaintBucket, Truck, Box, Tag, ShieldCheck, Gamepad, Film, Car, Feather } from 'lucide-react';
+import { ArrowLeft, Zap, BatteryCharging, Bluetooth, Mic, Smartphone, Tablet, Weight, PaintBucket, Truck, Box, ShieldCheck, Gamepad, Film, Car, Feather } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import QuickCheckoutForm from './QuickCheckoutForm';
-import type { Product } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 
 // Required for static export with dynamic routes
@@ -105,7 +104,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   return (
     <div>
         <Button asChild variant="outline" className="mb-8">
-            <Link href="/shop">
+            <Link href="/">
                 <ArrowLeft className="ml-2 h-4 w-4" />
                 العودة إلى المتجر
             </Link>

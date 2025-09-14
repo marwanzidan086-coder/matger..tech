@@ -2,8 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
-import { ShoppingCart, Home, Heart, Zap } from 'lucide-react';
+import { ShoppingCart, Home, Zap } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -20,7 +19,7 @@ export default function Header() {
           <span className="font-headline">{siteConfig.storeName}</span>
         </Link>
         <nav className='flex items-center gap-2'>
-           <Link href="/shop">
+           <Link href="/">
             <Button variant="ghost" size="icon">
               <Home className="h-6 w-6" />
               <span className="sr-only">المتجر</span>
