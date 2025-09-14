@@ -15,10 +15,11 @@ export const productImages: ProductImageData[] = [
   {
     id: 1,
     images: [
-      "https://i.ibb.co/L5hKzBr/image.png",
-      "https://i.ibb.co/k2q2wW7/image.png",
-      "https://i.ibb.co/ZJ2v9vM/image.png",
-      "https://i.ibb.co/hR01fht/image.png"
+      "https://i.ibb.co/0j8JTDqS/image-1.jpg",
+      "https://i.ibb.co/vCnQXQpq/image-2.png",
+      "https://i.ibb.co/S7w580Y1/image-3.jpg",
+      "https://i.ibb.co/3yW8MGFh/image-4.jpg",
+      "https://i.ibb.co/67Xmd1v0/image-5.jpg"
     ],
   },
   {
@@ -45,9 +46,9 @@ export const productImages: ProductImageData[] = [
     id: 4,
     images: [
         "https://i.ibb.co/bjCRBc5n/image-4.png",
-        "https://i.ibb.co/gFySDx91/image-1.png",
         "https://i.ibb.co/Vp5VwDZd/image-2.png",
-        "https://i.ibb.co/0RNwW5rt/image-3.png"
+        "https://i.ibb.co/0RNwW5rt/image-3.png",
+        "https://i.ibb.co/gFySDx91/image-1.png"
     ],
   },
   {
@@ -65,11 +66,9 @@ export const productImages: ProductImageData[] = [
   {
     id: 6,
     images: [
-      "https://i.ibb.co/k3t79S0/image.png",
-      "https://i.ibb.co/FWSy10R/image.png",
-      "https://i.ibb.co/3sH32sB/image.png",
-      "https://i.ibb.co/Vp8p3jF/image.png",
-      "https://i.ibb.co/wJvBGLp/image.png"
+      "https://i.ibb.co/0VWYDz0B/image-1.jpg",
+      "https://i.ibb.co/23MxFrR5/image-2.jpg",
+      "https://i.ibb.co/Fb6J0mCH/image-3.png"
     ],
   },
   {
